@@ -9,6 +9,15 @@ export const fetchRecipes = createAsyncThunk(
   }
 );
 
+export const removeFavorite = createAsyncThunk(
+  'recipes/removeFavorite',
+  async (recipeId) => {
+    // Perform async operation to remove the recipe from favorites (e.g., API call)
+    // For simplicity, we'll just return the recipeId in this example
+    return recipeId;
+  }
+);
+
 const recipesSlice = createSlice({
   name: 'recipes',
   initialState: {
@@ -28,6 +37,10 @@ const recipesSlice = createSlice({
         state.favorites.push(action.payload);
       }
     },
+    // New reducer to remove a recipe from favorites
+    removeFromFavorites(state, action) {
+      state.favorites = state.favorites.filter(recipe => recipe.idMeal !== action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,6 +58,6 @@ const recipesSlice = createSlice({
   },
 });
 
-export const { selectRecipe, addToFavorites } = recipesSlice.actions;
+export const { selectRecipe, addToFavorites, removeFromFavorites } = recipesSlice.actions;
 
 export default recipesSlice.reducer;

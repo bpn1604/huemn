@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchRecipes, selectRecipe ,addToFavorites} from '../redux/recipesSlice';
-import { Box, Button, Text, IconButton, Tooltip, SimpleGrid } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons';
+import { removeFromFavorites } from '../redux/recipesSlice';
+import { Box, Text, SimpleGrid, Button } from '@chakra-ui/react';
 
-const Favroite = () => {
-    const dispatch = useDispatch();
-  //const recipes = useSelector((state) => state.recipes.list);
-  const favorite = useSelector((state) =>state.recipes.favorites)
+const Favorite = () => {
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.recipes.favorites);
+
+  const handleRemoveFromFavorites = (recipeId) => {
+    dispatch(removeFromFavorites(recipeId));
+  };
+
   return (
-    <Box style={{ width: '40%', margin: '0 auto', float:"left" ,marginTop:"60px"}} box-shadow= "rgba(0, 0, 0, 0.35) 0px 5px 15px">
-      <Text as="h2" fontSize="2xl" mb="6" color="teal.500" textAlign="center">Recipes</Text>
+    <Box style={{ width: '40%', margin: '0 auto', float: "left", marginTop: "60px", padding:"20px" }} boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px">
+      <Text as="h2" fontSize="2xl" mb="6" color="teal.500" textAlign="center">Favorite Recipes</Text>
       <SimpleGrid columns={2} spacing={10}>
-        {favorite.map((recipe) => (
+        {favorites.map((recipe) => (
           <Box
             key={recipe.idMeal}
             p="4"
@@ -23,36 +26,24 @@ const Favroite = () => {
             _hover={{ boxShadow: 'xl', transform: 'scale(1.05)' }}
             transition="all 0.2s"
             position="relative"
+            textAlign="center"
           >
-            <Text fontWeight="bold" fontSize="lg" mb="2">{recipe.strMeal}</Text>
-            <Text mb="2">Category: {recipe.strCategory}</Text>
-            <Text mb="4">Area: {recipe.strArea}</Text>
-            {/* <Button
-              colorScheme="teal"
-              onClick={() => handleRecipeSelect(recipe)}
-              size="m"
-              background="teal"
-              color="white"
-              height="30px"
-              padding="5px"
+            <div>
+              <Text fontWeight="bold" fontSize="lg" mb="2">{recipe.strMeal}</Text>
+              <Text mb="2">Category: {recipe.strCategory}</Text>
+              <Text mb="4">Area: {recipe.strArea}</Text>
+            </div>
+            <Button
+              colorScheme="red"
+              onClick={() => handleRemoveFromFavorites(recipe.idMeal)} // Call handleRemoveFromFavorites with recipe id
+              size="sm"
+              variant="outline"
+              aria-label="Delete"
               cursor="pointer"
+              mt="4" // Add margin top to separate from text
             >
-              Click to know more
-            </Button> */}
-            {/* <Tooltip label="Add to favorite" aria-label="Add to favorite">
-              <IconButton
-                icon={<StarIcon />}
-                variant="outline"
-                colorScheme="yellow"
-                position="absolute"
-                top="4"
-                right="4"
-                onClick={() => handleAddToFavorites(recipe)}
-                size="sm"
-                aria-label="Add to favorite"
-                cursor="pointer"
-              />
-            </Tooltip> */}
+              Delete
+            </Button>
           </Box>
         ))}
       </SimpleGrid>
@@ -60,4 +51,4 @@ const Favroite = () => {
   )
 }
 
-export default Favroite
+export default Favorite;
